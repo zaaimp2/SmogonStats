@@ -1,4 +1,5 @@
 library(tidyverse)
+library(lubridate)
 
 #Reads in smogon data from the webpage, binds everything to a single data table
 readSmogonData = function(format = ""){
@@ -11,7 +12,7 @@ readSmogonData = function(format = ""){
   allMonths = allMonths[-length(allMonths)]
   output = list()
   output = map2(urlsList, allMonths, processOneFile)
-  output = row_bind(output)
+  output = bind_rows(output)
 }
 
 #Helper functions to get dates

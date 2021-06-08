@@ -1,6 +1,6 @@
 library(tidyverse)
 
-
+#Reads in smogon data from the webpage, binds everything to a single data table
 readSmogonData = function(format = ""){
   smogonURL = "https://www.smogon.com/stats"
   initialDate = ym("2014-11") #First month of smogon data
@@ -11,9 +11,11 @@ readSmogonData = function(format = ""){
   allMonths = allMonths[-length(allMonths)]
   output = list()
   output = map2(urlsList, allMonths, processOneFile)
+  output = row_bind(output)
 }
 
-getDates = function(initialDate = ym("2014-11")){ #Helper functions to get dates
+#Helper functions to get dates
+getDates = function(initialDate = ym("2014-11")){ 
   numberOfMonths = ((initialDate %--% today()) %/% months(1)) + 1
   output = rep(ymd("1970-01-01"), numberOfMonths) #Initialize blank vector
   for (i in seq_along(output)){
@@ -24,6 +26,7 @@ getDates = function(initialDate = ym("2014-11")){ #Helper functions to get dates
   output = as.character(output)
 }
 
+#helper function to read and clean each file
 processOneFile = function(urls, date){
   newColumnNames = c("Rank", "Pokemon", "UsagePercentage", "Raw", "RawPercentage", "Real", "RealPercentage")
   rawData = read_delim(urls, delim = "|", comment = "+", skip = 2, trim_ws = TRUE)

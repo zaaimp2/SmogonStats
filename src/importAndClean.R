@@ -30,7 +30,7 @@ getDates = function(initialDate = ym("2014-11")){
 #helper function to read and clean each file
 processOneFile = function(urls, date){
   newColumnNames = c("Rank", "Pokemon", "UsagePercentage", "Raw", "RawPercentage", "Real", "RealPercentage")
-  rawData = read_delim(urls, delim = "|", comment = "+", skip = 2, trim_ws = TRUE)
+  rawData = read_delim(urls, delim = "|", comment = "+", skip = 2, trim_ws = TRUE, col_types = cols())
   rawData = rawData %>% 
     select(-c(X1,X9)) %>% 
     filter(!row_number() == 1)

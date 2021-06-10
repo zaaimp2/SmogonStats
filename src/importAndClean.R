@@ -38,5 +38,6 @@ processOneFile = function(urls, date){
   rawData = rawData %>% 
     mutate(across(where(~any(str_detect(.,"%"))), parse_number)) %>% 
     mutate(date = ym(date)) %>% 
-    mutate(Raw = as.numeric(Raw), Real= as.numeric(Real))
+    mutate(Raw = as.numeric(Raw), Real= as.numeric(Real)) %>% 
+    mutate(Rank = parse_number(Rank))
 }

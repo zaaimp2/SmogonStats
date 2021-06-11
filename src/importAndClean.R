@@ -41,3 +41,22 @@ processOneFile = function(urls, date){
     mutate(Raw = as.numeric(Raw), Real= as.numeric(Real)) %>% 
     mutate(Rank = parse_number(Rank))
 }
+
+createPokemonSpecificData = function(jsonFile, pokemon, desiredStatistic){ #requires the data side
+  pokemonData = jsonFile[[pokemon]]
+  pokemonData = pokemonData[[desiredStatistic]]
+  pokemonTibble = as_tibble(pokemonData, .name_repair = "universal")
+  pokemonTibble = pokemonTibble %>% 
+    pivot_longer(everything(), names_to = desiredStatistic, values_to = "Usage")
+}
+
+createPokemonCounterData = function(jsonFile, pokemon){
+  pokemonData = jsonFile[[pokemon]]
+  pokemonData = pokemonData[["Checks and Counters"]]
+  pokemonTibble = as_tibble(pokemonData, .name_repair = "universal")
+  pokemonTibble = pokemonTibble %>% 
+    filter(row_number() == 2)
+  pokemonTibble = pokemonTibble %>% 
+    pivot_longer(everything(), names_to = "Pokemon", values_to = "forceOutRate") %>% 
+    mutate(forceOutRate = unlist(forceOutRate))
+}
